@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+
+  app:
+    container_name: online-conf
+    build: 
+      context: .
+      network: host
+    command: bash -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload" 
+    volumes:
+      - ./app:/code/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - test_db
+    restart: on-failure
+
+  db:
+    container_name: online-conf-db
+    image: postgres:13.7-alpine
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+
+  test_db:
+    container_name: online-conf-test-db
+    image: postgres:13.7-alpine
+    volumes:
+      - ./test_postgres_data:/var/lib/postresql/data
+    environment: 
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+    ports:
+      - "32768:5432"
