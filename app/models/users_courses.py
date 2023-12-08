@@ -1,0 +1,16 @@
+from db.db import Base
+from typing import Optional
+from uuid import UUID, uuid4
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+
+
+class UsersCourses(Base):
+    __tablename__ = "users_courses"
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True, default=uuid4)
+    course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"), primary_key=True, default=uuid4)
+    extra_data: Mapped[Optional[str]]
+    user: Mapped["Users"] = relationship(back_populates="users")
+    course: Mapped["Courses"] = relationship(back_populates="courses")
