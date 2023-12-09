@@ -27,3 +27,8 @@ class RoomOutSchema(RoomSchema):
     id: UUID
 
 
+class RoomCredsSchema(BaseModel):
+    key: str
+    password: Optional[str]
+
+
