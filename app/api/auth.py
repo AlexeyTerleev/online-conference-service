@@ -6,16 +6,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
 from api.dependencies import auth_service
-from schemas.users import (
-    RefreshTokenSchema,
-    TokenSchema,
-    UserOutSchema,
-    UserRegisterSchema,
-)
+from schemas.users import UserOutSchema, UserRegisterSchema
+from schemas.tokens import RefreshTokenSchema, TokenSchema
 from services.auth import AuthService
-from services.email import EmailService
 from services.users import UsersService
-from utils.oauth_bearer import get_current_unblocked_user
+
 
 router = APIRouter(
     prefix="/auth",
@@ -34,7 +29,7 @@ async def auth_singup(
     except UsersService.UserExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"{e.idtf} [{e.value}] is already used",
+            detail=f"Login [{e.login}] is already used",
         )
     except Exception as e:
         raise e
@@ -51,7 +46,7 @@ async def auth_login(
     except UsersService.UserNotFoundException as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"User with {e.idtf} [{e.value}] not found",
+            detail=f"User with login [{e.login}] not found",
         )
     except AuthService.IncorrectPasswordException as e:
         raise HTTPException(
@@ -81,18 +76,5 @@ async def auth_refresh_token(
             detail="Token expired",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    except Exception as e:
-        raise e
-
-
-@router.post("/reset-password")
-async def auth_reset_password(
-    user: Annotated[UserOutSchema, Depends(get_current_unblocked_user)],
-    email_service: Annotated[EmailService, Depends(EmailService)],
-):
-    try:
-        url = "https://test_url"
-        response = await email_service.send_reset_password_url(user.email, url)
-        return response
     except Exception as e:
         raise e

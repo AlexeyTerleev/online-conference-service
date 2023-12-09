@@ -12,5 +12,5 @@ class UsersCourses(Base):
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True, default=uuid4)
     course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"), primary_key=True, default=uuid4)
     extra_data: Mapped[Optional[str]]
-    user: Mapped["Users"] = relationship(back_populates="users")
-    course: Mapped["Courses"] = relationship(back_populates="courses")
+    user: Mapped["Users"] = relationship(back_populates="course_associations")
+    course: Mapped["Courses"] = relationship(back_populates="user_associations")

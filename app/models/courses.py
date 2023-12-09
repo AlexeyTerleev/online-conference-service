@@ -4,7 +4,10 @@ from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db.db import Base
-# from schemas.courses import CourseOutSchema
+from models.users_courses import UsersCourses
+
+from schemas.base import CourseIdSchema
+from schemas.courses import CourseOutSchema, CourseDbSchema
 
 
 class Courses(Base):
@@ -12,10 +15,29 @@ class Courses(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str]
-    users: Mapped[List["UsersCourses"]] = relationship(back_populates="courses")
 
-    # def to_read_model(self) -> CourseOutSchema:
-    #     return CourseOutSchema(
-    #         id=self.id,
-    #         name=self.name,
-    #     )
+    users: Mapped[List["Users"]] = relationship(
+        secondary="users_courses", back_populates="courses", viewonly=True, lazy="selectin",
+    )
+    user_associations: Mapped[List["UsersCourses"]] = relationship(
+        back_populates="course"
+    )
+
+    def to_id_model(self) -> CourseIdSchema:
+        return CourseIdSchema(
+            id=self.id,
+            name=self.name,
+        )
+
+    def to_db_model(self) -> CourseDbSchema:
+        return CourseDbSchema(
+            id=self.id,
+            name=self.name,
+        )
+
+    def to_read_model(self) -> CourseOutSchema:
+        return CourseOutSchema(
+            id=self.id,
+            name=self.name,
+            users=[user.to_id_model() for user in self.users],
+        )
