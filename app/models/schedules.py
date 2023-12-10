@@ -16,13 +16,13 @@ class Schedules(Base):
     start_date_time: Mapped[datetime]
     end_date_time: Mapped[datetime]
     course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"))
-    room_id: Mapped[UUID] = mapped_column(ForeignKey("rooms.id"))
+    room_id: Mapped[UUID] = mapped_column(ForeignKey("rooms.id"), nullable=True)
 
     def to_read_model(self) -> ScheduleOutSchema:
         return ScheduleOutSchema(
             id=self.id,
             start_date_time=self.start_date_time,
-            pasend_date_timesword=self.end_date_time,
+            end_date_time=self.end_date_time,
             course_id=self.course_id,
             room_id=self.room_id,
         )

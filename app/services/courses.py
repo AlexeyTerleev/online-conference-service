@@ -33,3 +33,13 @@ class CourseService:
     
     async def delete_course_by_id(self, id: UUID) -> None:
         await self.courses_repo.delete_all({"id": id})
+
+    async def get_courses(self, filter_by: dict = None) -> List[CourseOutSchema]:
+        courses = await self.courses_repo.find_all(filter_by if filter_by else {})
+        return [course.to_read_model() for course in courses]
+    
+    async def join_course_by_id(self, user_id: UUID, course_id: UUID) -> None:
+        await self.courses_repo.join_course(user_id, course_id)
+
+    async def leave_course_by_id(self, user_id: UUID, course_id: UUID) -> None:
+        await self.courses_repo.leave_course(user_id, course_id)

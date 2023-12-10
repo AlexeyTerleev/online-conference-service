@@ -2,8 +2,6 @@ import re
 from typing import List
 from uuid import UUID
 
-from sqlalchemy import asc, desc
-
 from schemas.users import (
     UserCreateSchema,
     UserOutSchema,
@@ -11,8 +9,8 @@ from schemas.users import (
     UserUpdateSchema,
     UserUpgradeSchema,
 )
-from utils.auth import get_hashed_password
 from utils.repository import AbstractDBRepository
+from utils.auth import get_hashed_password
 
 
 class UsersService:
@@ -42,7 +40,7 @@ class UsersService:
         user = await self.users_repo.find_one({"id": id})
         if not user:
             raise UsersService.UserNotFoundException(id)
-        return user
+        return user.to_read_model()
 
     async def create_user(
         self, new_user: UserRegisterSchema
@@ -80,6 +78,8 @@ class UsersService:
             raise UsersService.UserExistsException(login)
 
     async def __transform_values(self, dct: dict) -> dict:
+        if dct.get("password", None):
+            dct["hashed_password"] = get_hashed_password(dct.pop("password"))
         if dct.get("img_path", None):
             dct["img_path"] = str(dct["img_path"])
         return dct
@@ -94,30 +94,3 @@ class UsersService:
 
     async def delete_user_by_id(self, id: UUID) -> None:
         await self.users_repo.delete_all({"id": id})
-
-    async def get_users(
-        self,
-        page: int = None,
-        limit: int = None,
-        filter_by_name: str = None,
-        filter_by_surname: str = None,
-        filter_by_group_id: str = None,
-        sorted_by: str = None,
-        order_by: str = None,
-    ) -> List[UserOutSchema]:
-        filter_by = {
-            "name": filter_by_name,
-            "surname": filter_by_surname,
-            "group_id": filter_by_group_id,
-        }
-        filter_by = {key: value for key, value in filter_by.items() if value}
-        order_func = desc if order_by and order_by == "desc" else asc
-        offset = limit * page if page and limit else None
-        users = await self.users_repo.find_all(
-            filter_by=filter_by,
-            sorted_by=sorted_by,
-            order_func=order_func,
-            limit=limit,
-            offset=offset,
-        )
-        return users

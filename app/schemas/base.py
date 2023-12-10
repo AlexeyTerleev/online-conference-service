@@ -1,5 +1,6 @@
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict
+from typing import Optional
 
 from utils.roles import Role
 
@@ -15,6 +16,7 @@ class UserSchema(BaseModel):
 
 class CourseSchema(BaseModel):
     name: str
+    info: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)
 

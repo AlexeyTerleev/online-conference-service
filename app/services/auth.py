@@ -24,7 +24,7 @@ class AuthService:
         return user.to_read_model()
 
     async def login(self, form_data) -> TokenSchema:
-        user = await self.users_service.get_user_by_login(form_data.username).to_db_model()
+        user = (await self.users_service.get_user_by_login(form_data.username)).to_db_model()
         if not verify_password(form_data.password, user.hashed_password):
             raise AuthService.IncorrectPasswordException
         return TokenSchema(

@@ -9,8 +9,8 @@ from sqlalchemy.orm import relationship
 
 class UsersCourses(Base):
     __tablename__ = "users_courses"
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True, default=uuid4)
-    course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"), primary_key=True)
     extra_data: Mapped[Optional[str]]
     user: Mapped["Users"] = relationship(back_populates="course_associations")
     course: Mapped["Courses"] = relationship(back_populates="user_associations")

@@ -15,6 +15,7 @@ class Courses(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str]
+    info: Mapped[str]
 
     users: Mapped[List["Users"]] = relationship(
         secondary="users_courses", back_populates="courses", viewonly=True, lazy="selectin",
@@ -27,17 +28,20 @@ class Courses(Base):
         return CourseIdSchema(
             id=self.id,
             name=self.name,
+            info=self.info,
         )
 
     def to_db_model(self) -> CourseDbSchema:
         return CourseDbSchema(
             id=self.id,
             name=self.name,
+            info=self.info,
         )
 
     def to_read_model(self) -> CourseOutSchema:
         return CourseOutSchema(
             id=self.id,
             name=self.name,
+            info=self.info,
             users=[user.to_id_model() for user in self.users],
         )

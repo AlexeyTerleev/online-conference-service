@@ -39,4 +39,4 @@ async def get_current_user(
         user = await users_service.get_user_by_id(token_data.sub)
     except Exception as e:
         raise e
-    return user.to_read_model()
+    return user
