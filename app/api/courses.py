@@ -67,7 +67,6 @@ async def get_course_schedule(
         )
     except Exception as e:
         raise e
-    
 
 @router.post("/{course_id}/join", status_code=204)
 async def get_course_schedule(
@@ -92,6 +91,24 @@ async def get_course_schedule(
         raise e
     
 
+@router.delete("/{course_id}", status_code=204)
+async def get_course_schedule(
+    course_id: UUID,
+    user: Annotated[UserOutSchema, Depends(get_current_user)],
+    course_service: Annotated[CourseService, Depends(course_service)],
+):
+    try:
+        course = await course_service.get_course_by_id(course_id)
+        if user.id != course.owner_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Permission denied",
+            )
+        await course_service.delete_course_by_id(course_id)
+    except Exception as e:
+        raise e
+    
+
 @router.post("", response_model=CourseOutSchema)
 async def create_course(
     course: CourseRegisterSchema,
@@ -105,7 +122,7 @@ async def create_course(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Permission denied",
             )
-        created_course = await course_service.create_course(course)
+        created_course = await course_service.create_course(user.id, course)
         schedules = await schedule_service.create_course_schedule(created_course.id, course.schedules)
         return created_course
     except Exception as e:

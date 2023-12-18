@@ -4,7 +4,7 @@ from uuid import UUID
 
 from sqlalchemy import asc, desc
 
-from schemas.courses import CourseRegisterSchema, CourseCreateSchema, CourseOutSchema
+from schemas.courses import CourseRegisterSchema, CourseCreateSchema, CourseOutSchema, CourseIdSchema
 
 from utils.repository import AbstractDBRepository
 
@@ -25,12 +25,18 @@ class CourseService:
         return course
 
     async def create_course(
-        self, new_course: CourseRegisterSchema
+        self, owner_id: UUID, new_course: CourseRegisterSchema
     ) -> CourseOutSchema:
-        create_user = CourseCreateSchema(**new_course.model_dump())
-        created_user = await self.courses_repo.create_one(create_user.model_dump())
-        return created_user.to_read_model()
+        create_course = CourseCreateSchema(owner_id=owner_id, **new_course.model_dump())
+        created_course = await self.courses_repo.create_one(create_course.model_dump())
+        return created_course.to_read_model()
     
+    async def get_owner_courses(
+        self, owner_id: UUID
+    ) -> CourseIdSchema:
+        courses = await self.courses_repo.find_all({"owner_id": owner_id})
+        return [course.to_id_model() for course in courses]
+
     async def delete_course_by_id(self, id: UUID) -> None:
         await self.courses_repo.delete_all({"id": id})
 

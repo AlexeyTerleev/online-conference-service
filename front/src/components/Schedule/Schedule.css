@@ -1,0 +1,48 @@
+.schedule-container {
+    width: 800px;
+    height: 400px;
+    margin-top: 10px;
+}
+
+
+.schedule-day {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.schedule-day-date {
+    width: 20%;
+    border-right: 1px solid aliceblue;
+    margin-right: 10px;
+}
+
+.schedule-day-list{
+    width: 80%;
+}
+
+.schedule-day-row{
+    display: flex;
+    justify-content: space-around;
+    width:100%;
+}
+.schedule-day-row-time{
+    display: flex;
+    justify-content: center;
+    width: 40%;
+}
+.schedule-day-row-name{
+    display: flex;
+    justify-content: center;
+    width: 40%;
+}
+.schedule-day-row-button{
+    display: flex;
+    justify-content: center;
+    width: 20%;
+}

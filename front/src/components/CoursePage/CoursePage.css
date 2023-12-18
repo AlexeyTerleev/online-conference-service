@@ -1,0 +1,8 @@
+.courses-wrapper{
+    display: flex;
+}
+.vertical-line {
+    border-left: 1px solid aliceblue;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}

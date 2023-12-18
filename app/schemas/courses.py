@@ -9,7 +9,7 @@ class CourseRegisterSchema(CourseSchema):
 
 
 class CourseCreateSchema(CourseSchema):
-    ...
+    owner_id: UUID
 
 
 class CourseDbSchema(CourseIdSchema):

@@ -6,12 +6,15 @@ from starlette import status
 
 from schemas.users import UserOutSchema
 from schemas.schedules import ScheduleOutSchema
+from schemas.courses import CourseIdSchema
 
 from utils.oauth_bearer import get_current_user
 from services.users import UsersService
 from services.schedules import ScheduleService
+from services.courses import CourseService
 
-from api.dependencies import users_service, schedule_service
+from api.dependencies import users_service, schedule_service, course_service
+from utils.roles import Role
 
 
 router = APIRouter(
@@ -34,15 +37,34 @@ async def me_get(
 async def me_schedule_get(
     user: Annotated[UserOutSchema, Depends(get_current_user)],
     schedule_service: Annotated[ScheduleService, Depends(schedule_service)],
+    course_service: Annotated[CourseService, Depends(course_service)],
 ):
     try:
+        if user.role == Role.student:
+            courses = user.courses
+        else: 
+            courses = await course_service.get_owner_courses(user.id)
         schedule = []
-        for course in user.courses:
+        for course in courses:
             schedule += await schedule_service.get_schedule_by_course_id(course.id)
         return schedule
     except Exception as e:
         raise e
     
+@router.get("/me/courses", response_model=List[CourseIdSchema])
+async def me_schedule_get(
+    user: Annotated[UserOutSchema, Depends(get_current_user)],
+    course_service: Annotated[CourseService, Depends(course_service)],
+):
+    try:
+        if user.role == Role.student:
+            return user.courses
+        else:
+            courses = await course_service.get_owner_courses(user.id)
+            return courses
+    except Exception as e:
+        raise e
+
 
 @router.get("/{user_id}", response_model=UserOutSchema)
 async def users_get(

@@ -4,7 +4,6 @@ from uuid import UUID
 from sqlalchemy import asc, desc
 
 from schemas.schedules import ScheduleCreateSchema, ScheduleOutSchema, ScheduleRegisterSchema
-
 from utils.repository import AbstractDBRepository
 
 
@@ -16,6 +15,12 @@ class ScheduleService:
 
     def __init__(self, shedules_repo: AbstractDBRepository):
         self.shedules_repo: AbstractDBRepository = shedules_repo()
+
+    async def get_schedule_id(self, id: UUID) -> ScheduleOutSchema:
+        schedule = await self.shedules_repo.find_one({"id": id})
+        if not schedule:
+            raise ScheduleService.ScheduleNotFoundException()
+        return schedule.to_read_model()
 
     async def get_schedule_by_course_id(self, course_id: UUID) -> List[ScheduleOutSchema]:
         schedules = await self.shedules_repo.find_all({"course_id": course_id})

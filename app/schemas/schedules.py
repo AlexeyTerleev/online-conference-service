@@ -2,6 +2,7 @@ from typing import Optional
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, validator
+from schemas.base import CourseIdSchema
 
 
 class ScheduleSchema(BaseModel):
@@ -28,5 +29,5 @@ class ScheduleCreateSchema(ScheduleSchema):
 
 class ScheduleOutSchema(ScheduleSchema):
     id: UUID
-    course_id: UUID
+    course: CourseIdSchema
     room_id: Optional[UUID] = None

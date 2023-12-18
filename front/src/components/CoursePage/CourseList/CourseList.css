@@ -1,0 +1,58 @@
+.list-container {
+    width: 400px;
+    height: 400px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.list-wrapper{
+
+}
+.list-header {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.list-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.course-record {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-bottom: 1px solid aliceblue;
+}
+
+.course-name {
+    width: 30%;
+}
+.course-info {
+    width: 60%;
+}
+
+.course-button{
+    width: 15%;
+    border: 0;
+    border-radius: 5px;
+    color:aliceblue;
+}
+
+.leave{
+    background-color: brown;
+}
+.course-button.join{
+    background-color:rgb(48, 117, 38);
+}
+
+.create-course-button{
+    background-color: #303030;
+    border: 1px solid aliceblue;
+    border-radius: 5px;
+    color: aliceblue;
+}

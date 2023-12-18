@@ -26,3 +26,4 @@ class UserIdSchema(UserSchema):
 
 class CourseIdSchema(CourseSchema):
     id: UUID
+    owner_id: UUID

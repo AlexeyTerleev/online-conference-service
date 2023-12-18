@@ -15,15 +15,19 @@ class Schedules(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     start_date_time: Mapped[datetime]
     end_date_time: Mapped[datetime]
-    course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id"))
+    course_id: Mapped[UUID] = mapped_column(ForeignKey("courses.id", ondelete="CASCADE"))
     room_id: Mapped[UUID] = mapped_column(ForeignKey("rooms.id"), nullable=True)
+
+    course: Mapped["Courses"] = relationship(
+        back_populates="schedules", lazy="selectin",
+    )
 
     def to_read_model(self) -> ScheduleOutSchema:
         return ScheduleOutSchema(
             id=self.id,
             start_date_time=self.start_date_time,
             end_date_time=self.end_date_time,
-            course_id=self.course_id,
+            course=self.course.to_id_model(),
             room_id=self.room_id,
         )
     

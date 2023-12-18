@@ -18,7 +18,7 @@ router = APIRouter(
 )
 
 
-@router.post("/singup", response_model=UserOutSchema)
+@router.post("/signup", response_model=UserOutSchema)
 async def auth_singup(
     new_user: UserRegisterSchema,
     auth_service: Annotated[AuthService, Depends(auth_service)],

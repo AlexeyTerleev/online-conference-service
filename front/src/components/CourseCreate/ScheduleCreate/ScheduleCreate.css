@@ -1,0 +1,25 @@
+.schedule-create-contanier {
+    width: 800px;
+    height: 250px;
+}
+.schedule-create-wrapper{
+    border: 1px solid aliceblue;
+    border-radius: 5px;
+    padding:10px;
+    margin-top:10px;
+    margin-right:10px;
+    display: flex;
+    flex-direction: column;
+}
+.schedule-create-list{
+    max-height: 200px; 
+    overflow-y: auto; 
+}
+.schedule-create-row{
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.schedule-create-row div{
+    width: 30%
+}
