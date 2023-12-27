@@ -50,9 +50,10 @@ export default function Schedule() {
                 const schedulesOnDate = schedules.filter(schedule => schedule.start_date_time.startsWith(date));
                 return { ...acc, [date]: schedulesOnDate };
             }, {});
-
-            console.log(schedulesByDate);
-            setSchedule(schedulesByDate);
+            var sortedSchedulesByDate = Object.entries(schedulesByDate)
+                .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+                .reduce((acc, [date, schedulesOnDate]) => ({ ...acc, [date]: schedulesOnDate }), {});
+            setSchedule(sortedSchedulesByDate);
         })
         .catch(error => {
             console.error(error);
@@ -60,8 +61,12 @@ export default function Schedule() {
     }
 
     const handleRoomCreateClick = (schedule_id) => {
-        console.log(schedule_id);
         navigate('/room/create', { state: { schedule_id } });
+    };
+
+    const handleRoomJoinClick = (schedule_id) => {
+        console.log(schedule_id);
+        navigate('/room/enter', { state: { schedule_id } });
     };
 
     useEffect(fetchData, [location]);
@@ -74,29 +79,31 @@ export default function Schedule() {
         <div className="page-container">
             <div className="page-wrapper">
                 <div className='header'>Schedule</div>
-                <div className='schedule-container'>
-                    {
-                        Object.keys(schedules).map(
-                            date =>
-                            <li key={date} className='schedule-day'>
-                                <div className='schedule-day-date'>{date}</div>
-                                <div className='schedule-day-list'>
-                                    {
-                                        schedules[date].map(
-                                            schedule => <li key={schedule.id} className='schedule-day-row'>
-                                                <div className='schedule-day-row-time'>{schedule.start_date_time.split("T")[1]} - {schedule.end_date_time.split("T")[1]}</div>
-                                                <div className='schedule-day-row-name'>{schedule.course.name}</div>
-                                                <div className='schedule-day-row-button'>
-                                                {!schedule.room_id && userRole === "TEACHER" && <button onClick={() => handleRoomCreateClick(schedule.id)}>Create Room</button>}
-                                                {schedule.room_id && <button>Join</button>}
-                                                </div>
-                                            </li>
-                                        )
-                                    }
-                                </div>
-                            </li>
-                        )
-                    }
+                <div className='body'>
+                    <div className='schedule-container'>
+                        {
+                            Object.keys(schedules).map(
+                                date =>
+                                <li key={date} className='schedule-day'>
+                                    <div className='schedule-day-date'>{date}</div>
+                                    <ul className='schedule-day-list'>
+                                        {
+                                            schedules[date].map(
+                                                schedule => <li key={schedule.id} className='schedule-day-row'>
+                                                    <div className='schedule-day-row-time'>{schedule.start_date_time.split("T")[1]} - {schedule.end_date_time.split("T")[1]}</div>
+                                                    <div className='schedule-day-row-name'>{schedule.course.name}</div>
+                                                    <div className='schedule-day-row-button'>
+                                                    {!schedule.room_id && userRole === "TEACHER" && <button onClick={() => handleRoomCreateClick(schedule.id)} className='create'>Create</button>}
+                                                    {schedule.room_id && <button className='join' onClick={() => handleRoomJoinClick(schedule.room_id)}>Join</button>}
+                                                    </div>
+                                                </li>
+                                            )
+                                        }
+                                    </ul>
+                                </li>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
         </div>

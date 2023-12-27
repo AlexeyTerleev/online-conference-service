@@ -44,15 +44,12 @@
 }
 
 .leave{
-    background-color: brown;
+    background-color: #e74c3c;
 }
 .course-button.join{
     background-color:rgb(48, 117, 38);
 }
 
 .create-course-button{
-    background-color: #303030;
-    border: 1px solid aliceblue;
-    border-radius: 5px;
-    color: aliceblue;
+
 }

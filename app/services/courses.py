@@ -14,6 +14,14 @@ class CourseService:
     class CourseNotFoundException(Exception):
         def __init__(self, *args: object) -> None:
             super().__init__(*args)
+    
+    class AlreadyJoinedException(Exception):
+        def __init__(self, *args: object) -> None:
+            super().__init__(*args)
+    
+    class NotJoinedException(Exception):
+        def __init__(self, *args: object) -> None:
+            super().__init__(*args)
 
     def __init__(self, courses_repo: AbstractDBRepository):
         self.courses_repo: AbstractDBRepository = courses_repo()
@@ -21,7 +29,7 @@ class CourseService:
     async def get_course_by_id(self, id):
         course = await self.courses_repo.find_one({"id": id})
         if not course:
-            raise CourseService.CourseNotFoundException()
+            raise CourseService.CourseNotFoundException
         return course
 
     async def create_course(
@@ -45,7 +53,13 @@ class CourseService:
         return [course.to_read_model() for course in courses]
     
     async def join_course_by_id(self, user_id: UUID, course_id: UUID) -> None:
+        course = await self.get_course_by_id(course_id)
+        if user_id in [user.id for user in course.users]:
+            raise CourseService.AlreadyJoinedException
         await self.courses_repo.join_course(user_id, course_id)
 
     async def leave_course_by_id(self, user_id: UUID, course_id: UUID) -> None:
+        course = await self.get_course_by_id(course_id)
+        if user_id not in [user.id for user in course.users]:
+            raise CourseService.AlreadyJoinedException
         await self.courses_repo.leave_course(user_id, course_id)

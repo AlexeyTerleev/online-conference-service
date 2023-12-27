@@ -1,0 +1,11 @@
+.room-body{
+    display: flex;
+    flex-direction: column;
+    width:400px;
+}
+.row{
+    width: 100%;
+}
+.row button{
+    width: 50%;
+}

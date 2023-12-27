@@ -69,30 +69,40 @@ async def get_course_schedule(
         raise e
 
 @router.post("/{course_id}/join", status_code=204)
-async def get_course_schedule(
+async def join_course(
     course_id: UUID,
     user: Annotated[UserOutSchema, Depends(get_current_user)],
     course_service: Annotated[CourseService, Depends(course_service)],
 ):
     try:
         await course_service.join_course_by_id(user.id, course_id)
+    except CourseService.AlreadyJoinedException:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You are already joined this course",
+        )
     except Exception as e:
         raise e
     
 @router.delete("/{course_id}/leave", status_code=204)
-async def get_course_schedule(
+async def leave_course(
     course_id: UUID,
     user: Annotated[UserOutSchema, Depends(get_current_user)],
     course_service: Annotated[CourseService, Depends(course_service)],
 ):
     try:
         await course_service.leave_course_by_id(user.id, course_id)
+    except CourseService.NotJoinedException:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You haven't joined this course yet",
+        )
     except Exception as e:
         raise e
     
 
 @router.delete("/{course_id}", status_code=204)
-async def get_course_schedule(
+async def delete_course(
     course_id: UUID,
     user: Annotated[UserOutSchema, Depends(get_current_user)],
     course_service: Annotated[CourseService, Depends(course_service)],

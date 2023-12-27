@@ -1,9 +1,7 @@
 .schedule-container {
     width: 800px;
     height: 400px;
-    margin-top: 10px;
 }
-
 
 .schedule-day {
     display: flex;
@@ -29,8 +27,20 @@
 .schedule-day-row{
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width:100%;
+    
 }
+
+.schedule-day-row:not(:first-child){
+    padding-top: 10px;
+}
+
+.schedule-day-row:not(:last-child){
+    border-bottom: 1px solid aliceblue;
+    padding-bottom: 10px;
+}
+
 .schedule-day-row-time{
     display: flex;
     justify-content: center;
@@ -41,8 +51,27 @@
     justify-content: center;
     width: 40%;
 }
+
 .schedule-day-row-button{
+    width: 15%;
+}
+
+.schedule-day-row-button button{
     display: flex;
     justify-content: center;
-    width: 20%;
+    width: 100%;
+    border: 0;
+    border-radius: 5px;
+    color: aliceblue;
 }
+
+.schedule-day-row-button .create{
+    background-color:rgb(190, 115, 65);
+}
+
+.schedule-day-row-button .join{
+    background-color:rgb(48, 117, 38);
+}
+
+
+

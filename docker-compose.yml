@@ -14,7 +14,6 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - test_db
     restart: on-failure
 
   db:
@@ -28,15 +27,3 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
-
-  test_db:
-    container_name: online-conf-test-db
-    image: postgres:13.7-alpine
-    volumes:
-      - ./test_postgres_data:/var/lib/postresql/data
-    environment: 
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_DB=test
-    ports:
-      - "32768:5432"

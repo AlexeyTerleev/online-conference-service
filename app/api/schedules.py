@@ -18,7 +18,7 @@ router = APIRouter(
 )
 
 @router.post("/{schedule_id}/room")
-async def get_course_schedule(
+async def create_room(
     schedule_id: UUID,
     new_room: RoomRegisterSchema,
     user: Annotated[UserOutSchema, Depends(get_current_user)],
@@ -38,7 +38,7 @@ async def get_course_schedule(
         raise e
     
 @router.get("/{schedule_id}/room", response_model=RoomOutSchema)
-async def get_course_schedule(
+async def get_room(
     schedule_id: UUID,
     user: Annotated[UserOutSchema, Depends(get_current_user)],
     room_service: Annotated[RoomService, Depends(room_service)],

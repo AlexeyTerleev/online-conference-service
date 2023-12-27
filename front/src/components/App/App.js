@@ -9,6 +9,8 @@ import CoursePage from '../CoursePage/CoursePage';
 import CourseCreate from '../CourseCreate/CourseCreate';
 import Schedule from '../Schedule/Schedule'
 import RoomCreate from '../RoomCreate/RoomCreate'
+import RoomEnter from '../RoomEnter/RoomEnter';
+import Room from '../Room/Room';
 import useToken from './useToken';
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
         <Route path="/course/create" element={<ProtectedRoute element={CourseCreate} />} />
         <Route path="/schedule" element={<ProtectedRoute element={Schedule} />} />
         <Route path="/room/create" element={<ProtectedRoute element={RoomCreate} />} />
+        <Route path="/room/enter" element={<ProtectedRoute element={RoomEnter} />} />
+        <Route path="/room" element={<ProtectedRoute element={Room} />} />
+        
         <Route path="*" element={<Navigate to="/main" />} />
       </Routes>
     </BrowserRouter>

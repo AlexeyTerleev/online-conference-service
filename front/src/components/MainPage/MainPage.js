@@ -6,7 +6,6 @@ import useToken from '../App/useToken';
 
 export default function MainPage() {
   const {token, setToken} = useToken();
-  console.log(token)
 
   if (token) {
     return( 
@@ -16,8 +15,8 @@ export default function MainPage() {
         <div className="body">
           <div className="main-page-container">
             <div className="main-menu">
-              <Link to="/" className="main-menu-button">Connect</Link>
-              <Link to="/" className="main-menu-button">Create</Link>
+              <Link to="/room/enter" className="main-menu-button">Connect</Link>
+              <Link to="/room/create" className="main-menu-button">Create</Link>
               <Link to="/schedule" className="main-menu-button">Schedule</Link>
               <Link to="/courses" className="main-menu-button">Courses</Link>
               <Link to="/user/me" className="main-menu-button">Profile</Link>

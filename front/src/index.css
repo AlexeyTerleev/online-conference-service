@@ -15,3 +15,80 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+button {
+  background-color: #303030;
+  border: 1px solid aliceblue;
+  border-radius: 5px;
+  color: aliceblue;
+}
+
+.page-container{
+  background-color: #303030;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: aliceblue;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid aliceblue;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.header{
+  text-align: center;
+  border-bottom: 1px solid aliceblue;
+  padding-bottom: 10px;
+}
+
+.body{
+  margin-top: 10px;
+  display: flex;
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+input[type=text], input[type=password] {
+  width: 95%;
+  background-color: #303030;
+  color: aliceblue;
+  border: 1px solid aliceblue;
+  border-radius: 5px;
+  transition: 0.5s;
+  outline: none;
+}
+input[type=text]:focus {
+  border: 1px solid rgb(143, 148, 153);
+}
+input[type=password]:focus {
+  border: 1px solid rgb(143, 148, 153);
+}
+
+.error-input[type=text], .error-input[type=password]{
+  border: 1px solid #e74c3c;
+}
+.error-input[type=text]:focus {
+  border: 1px solid rgb(148, 1, 1);
+}
+.error-input[type=password]:focus {
+  border: 1px solid rgb(148, 1, 1);
+}
+
+.correct-input[type=text], .correct-input[type=password]{
+  border: 1px solid rgb(48, 117, 38);
+}
+.correct-input[type=text]:focus {
+  border: 1px solid rgb(31, 77, 25);
+}
+.correct-input[type=password]:focus {
+  border: 1px solid rgb(31, 77, 25);
+}

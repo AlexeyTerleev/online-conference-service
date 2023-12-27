@@ -14,28 +14,28 @@ class RoomService:
         def __init__(self, *args: object) -> None:
             super().__init__(*args)
 
-    def __init__(self, rooms_repo: AbstractDBRepository):
-        self.rooms_repo: AbstractDBRepository = rooms_repo()
+    def __init__(self, room_repo: AbstractDBRepository):
+        self.room_repo: AbstractDBRepository = room_repo()
 
     async def get_room_by_id(self, id):
-        course = await self.rooms_repo.find_one({"id": id})
-        if not course:
+        room = await self.room_repo.find_one({"id": id})
+        if not room:
             raise RoomService.RoomNotFoundException()
-        return course
+        return room
 
     async def create_room(
         self, new_room: RoomRegisterSchema
     ) -> RoomOutSchema:
         create_room = RoomCreateSchema(**new_room.model_dump())
-        created_room = await self.rooms_repo.create_one(create_room.model_dump())
+        created_room = await self.room_repo.create_one(create_room.model_dump())
         return created_room.to_read_model()
     
     async def delete_room_by_id(self, id: UUID) -> None:
-        await self.rooms_repo.delete_all({"id": id})
+        await self.room_repo.delete_all({"id": id})
 
     async def join_room(
         self, creds: RoomCredsSchema
     ) -> bool:
-        room = self.get_room_by_id(UUID(creds.key))
+        room = await self.get_room_by_id(creds.key)
         return not room.private or room.password == creds.password
     

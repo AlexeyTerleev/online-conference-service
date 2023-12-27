@@ -13,6 +13,8 @@ class RoomSchema(BaseModel):
     def validate_password(cls, value, values):
         if values.get('private') and not value:
             raise ValueError("Password is required for private rooms")
+        if not values.get('private') and value:
+            raise ValueError("Password can't be set for not private rooms")
         return value
 
 
@@ -28,7 +30,7 @@ class RoomOutSchema(RoomSchema):
 
 
 class RoomCredsSchema(BaseModel):
-    key: str
+    key: UUID
     password: Optional[str]
 
 

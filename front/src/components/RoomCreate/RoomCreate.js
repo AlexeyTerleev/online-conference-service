@@ -25,11 +25,22 @@ export default function RoomCreate({ schedule_id }) {
         "private": isPrivate,
         "password": password,
       };
+
+      const scheduleId = location.state && location.state.schedule_id;
+      const url = scheduleId
+        ? `http://localhost:8000/schedule/${location.state.schedule_id}/room`
+        : `http://localhost:8000/room`;
   
       axios
-        .post(`http://localhost:8000/schedule/${location.state.schedule_id}/room`, data, config)
+        .post(url, data, config)
         .then(response => {
-          navigate("/schedule");
+          console.log(response.data)
+          if (location.state.schedule_id){
+            navigate("/schedule")
+          }
+          else {
+            navigate("/main")
+          }
         })
         .catch(error => {
           console.error(error);
@@ -45,6 +56,7 @@ export default function RoomCreate({ schedule_id }) {
         <div className="page-wrapper">
           <div className='header'>Create Room</div>
           <div className='room-create-container'>
+            <form onSubmit={sendData}> 
             <div className='room-create-row'>
                 <p>Private: </p>
                 <input type='checkbox' checked={isPrivate} onChange={e => setPrivate(e.target.checked)} />
@@ -53,10 +65,11 @@ export default function RoomCreate({ schedule_id }) {
             {isPrivate && (
                 <div className='room-create-row'>
                     <p>Password: </p>
-                    <input type="password" onChange={e => setPassword(e.target.value)} />
+                    <input type="password" autoComplete="new-password" onChange={e => setPassword(e.target.value)} />
                 </div>
             )}
-            <button onClick={sendData}>Create Room</button>
+            <button type="submit">Create Room</button>
+            </form>
           </div>
         </div>
       </div>
